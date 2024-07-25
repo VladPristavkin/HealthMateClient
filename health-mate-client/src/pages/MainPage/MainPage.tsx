@@ -11,7 +11,12 @@ const MainPage: React.FC = () => {
             <div className="main-content">
                 <Header />
                 <div className="main-content-body">
-                 
+                    <div className="main-content-body-left">
+                        <DashboardLayout />
+                    </div>
+                    <div className="main-content-body-right">
+                        <RightSidebar />
+                    </div>
                 </div>
             </div>
         </div>
