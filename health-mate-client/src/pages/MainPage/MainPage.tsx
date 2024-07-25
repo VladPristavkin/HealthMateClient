@@ -9,9 +9,9 @@ const MainPage: React.FC = () => {
     return (
         <div className="main-page">
             <div className="main-content">
-                
+                <Header />
                 <div className="main-content-body">
-                   
+                 
                 </div>
             </div>
         </div>
