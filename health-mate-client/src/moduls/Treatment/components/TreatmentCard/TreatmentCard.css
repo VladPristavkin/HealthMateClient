@@ -1,0 +1,64 @@
+.treatment-card {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 8px;
+    height: 50px;
+    overflow: hidden;
+  }
+  
+  .treatment-card-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .treatment-card-icon img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .treatment-card-content {
+    flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .treatment-card-value-container {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .treatment-card-value {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 4px;
+  }
+  
+  .treatment-card-unit {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .treatment-card-title {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
