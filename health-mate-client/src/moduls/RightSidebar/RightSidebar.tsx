@@ -1,21 +1,24 @@
 import React from "react";
 import { Layout } from 'antd';
-import "./RightSidebar.css";
-import MainPageRecomendations from "./components/MainPageRecomendations/MainPageRecomendations";
 import CustomCalendar from "./components/CustomCalendar/CustomCalendar";
 
-const { Sider } = Layout;
-
-const RightSidebar: React.FC = ()=>{
-    return(
-        <Sider className="right-sidebar" width={400}>
-            <div className="right-sidebar-calendar">
-                <CustomCalendar/>
+const RightSidebar: React.FC = () => {
+    return (
+        <Layout.Sider width={400}
+            style={{
+                backgroundColor: "#ffffff",
+                flexDirection: "column",
+                display: "flex",
+                boxShadow: " 0.2em 0 1em rgba(0, 0, 0, 0.1)",
+                borderRadius: "3em",
+                overflow: "hidden",
+                alignItems: "center"
+            }}
+        >
+            <div>
+                <CustomCalendar />
             </div>
-            <div className="right-sidebar-recomendations">
-                <MainPageRecomendations/>
-            </div>
-        </Sider>
+        </Layout.Sider>
     );
 }
 

@@ -1,5 +1,5 @@
-import React from "react";
-import './HealthCard.css';
+import { FC } from 'react';
+import { Card, Avatar, Typography } from 'antd';
 
 interface HealthCardProps {
     image: string;
@@ -8,18 +8,37 @@ interface HealthCardProps {
     unitOfMeasure: string;
 }
 
-const HealthCard: React.FC<HealthCardProps> = ({image, title, value, unitOfMeasure}) => {
+const HealthCard: FC<HealthCardProps> = (HealthCardProps) => {
     return (
-        <div className="health-card">
-            <div className="health-card-img">
-                <img src={image} alt={title} />
+        <Card
+            style={{
+                margin: '0.5rem',
+                borderRadius: '1rem',
+                transition: 'transform 0.3s ease',
+            }}
+            bodyStyle={{
+                padding: '0.8em',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+            hoverable
+        >
+            <Avatar
+                size={64}
+                src={HealthCardProps.image}
+                style={{
+                    marginRight: '1em',
+
+                }}
+            />
+            <div>
+                <Typography.Title level={4} style={{ margin: 0 }}>
+                    {HealthCardProps.value} <Typography.Text type="secondary" style={{ fontSize: '1rem', color: "#000000" }}>{HealthCardProps.unitOfMeasure}</Typography.Text>
+                </Typography.Title>
+                <Typography.Text type="secondary" style={{ color: "#000000" }}>{HealthCardProps.title}</Typography.Text>
             </div>
-            <div className="health-card-data">
-                <h3>{value} <span>{unitOfMeasure}</span></h3>
-                <p>{title}</p>
-            </div>
-        </div>
+        </Card>
     );
-}
+};
 
 export default HealthCard;

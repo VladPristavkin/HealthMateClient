@@ -1,6 +1,6 @@
-import { NoteData } from "./NoteData";
+import { NoteData } from "./NoteType";
 
-export interface HealthData {
+export type HealthType = {
     id: string;
     systolicBloodPressure: number;
     diastolicBloodPressure: number;

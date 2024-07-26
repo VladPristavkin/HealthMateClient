@@ -1,16 +1,16 @@
 import axios from 'axios';
-import { HealthData } from '../moduls/Health/interfaces/HealthData';
+import { HealthType } from '../shared/types/HealthType';
 
 const api = axios.create({
-    baseURL: "https://localhost:7257/api",
+    baseURL: process.env.REACT_APP_API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
 export const healthApi = {
-    getHealthByDate: async (userId: string, date: string): Promise<HealthData[]> => {
-        const response = await api.get<HealthData[]>(`/Health/${userId}/by-date`,
+    getHealthByDate: async (userId: string, date: string): Promise<HealthType[]> => {
+        const response = await api.get<HealthType[]>(`/Health/${userId}/by-date`,
             {
                 params: { date }
             }
@@ -18,8 +18,8 @@ export const healthApi = {
         return response.data;
     },
 
-    getHealthBetweenDates: async (userId: string, startDate: string, finishDate: string): Promise<HealthData[]> => {
-        const response = await api.get<HealthData[]>(`/Health/${userId}/between-dates`,
+    getHealthBetweenDates: async (userId: string, startDate: string, finishDate: string): Promise<HealthType[]> => {
+        const response = await api.get<HealthType[]>(`/Health/${userId}/between-dates`,
             {
                 params: { startDate, finishDate }
             }
@@ -27,17 +27,17 @@ export const healthApi = {
         return response.data;
     },
 
-    addHealth: async (health: Omit<HealthData, 'id'>): Promise<HealthData> => {
-        const response = await api.post<HealthData>('/Health', health);
+    addHealth: async (health: Omit<HealthType, 'id'>): Promise<HealthType> => {
+        const response = await api.post<HealthType>('/Health', health);
         return response.data;
     },
 
-    updateHealth: async (health: HealthData): Promise<HealthData> => {
-        const response = await api.put<HealthData>(`/Health/${health.id}`, health);
+    updateHealth: async (health: HealthType): Promise<HealthType> => {
+        const response = await api.put<HealthType>(`/Health/${health.id}`, health);
         return response.data;
     },
 
-    deleteHealthd: async (id: string): Promise<void> => {
+    deleteHealth: async (id: string): Promise<void> => {
         await api.delete(`/Health/${id}`);
     },
 };

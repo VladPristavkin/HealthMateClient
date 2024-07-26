@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, Select, Row, Col } from 'antd';
-import './Mood.css';
+import { FC } from 'react';
 
-const { Option } = Select;
-
-
-const Mood: React.FC = () => {
+const Mood: FC = () => {
   return (
     <div></div>
   );

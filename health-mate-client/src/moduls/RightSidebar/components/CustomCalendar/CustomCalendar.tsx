@@ -38,12 +38,12 @@ const CustomCalendar: React.FC = () => {
   };
 
   return (
-    <Calendar 
+    <Calendar
       fullscreen={false}
       headerRender={headerRender}
       value={currentDate}
       onSelect={(newDate: Dayjs) => setCurrentDate(newDate)}
-      style={{ width: '25em', height:'25em' }}
+      style={{ width: '25em', height: '25em' }}
     />
   );
 };
