@@ -1,7 +1,7 @@
-import React from "react";
+import { FC } from "react";
 
-const Nutrition: React.FC = () =>{
-    return(
+const Nutrition: FC = () => {
+    return (
         <div></div>
     );
 }

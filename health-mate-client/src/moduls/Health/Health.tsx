@@ -3,15 +3,15 @@ import HealthCard from "./components/HealthCard/HealthCard";
 import './Health.css';
 import UniversalChart, { DataPoint } from "../../components/UniversalChart/UniversalChart";
 import { ChartTypes } from "../../components/UniversalChart/UniversalChart";
-import { HealthData } from "./interfaces/HealthData";
 import HealthRecords from './components/HealthRecords/HealthRecords';
 import { Button, DatePicker, Form, InputNumber, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { healthApi } from '../../api/healthApi';
+import { HealthType } from '../../shared/types/HealthType';
 
 const Health: React.FC = () => {
-    const [healthData, setHealthData] = useState<HealthData[]>([]);
+    const [healthData, setHealthData] = useState<HealthType[]>([]);
     const [chartData, setChartData] = useState<DataPoint[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [form] = Form.useForm();
@@ -34,7 +34,7 @@ const Health: React.FC = () => {
         }
     };
 
-    const convertToChartData = (data: HealthData[]): DataPoint[] => {
+    const convertToChartData = (data: HealthType[]): DataPoint[] => {
         return data.map(item => ({
             date: item.date,
             systolicBloodPressure: item.systolicBloodPressure,
@@ -46,10 +46,10 @@ const Health: React.FC = () => {
     };
 
     const healthCards = [
-        { image: "/images/heart-rate.png", title: "Heart Rate", getValue: (data: HealthData) => data.heartRate.toString(), unitOfMeasure: "bpm" },
-        { image: "/images/blood-pressure.png", title: "Blood Pressure", getValue: (data: HealthData) => `${data.systolicBloodPressure}/${data.diastolicBloodPressure}`, unitOfMeasure: "mmHg" },
-        { image: "/images/blood-sugar.png", title: "Blood Sugar", getValue: (data: HealthData) => data.bloodSugar.toFixed(1), unitOfMeasure: "mmol/L" },
-        { image: "/images/cholesterol.png", title: "Cholesterol", getValue: (data: HealthData) => data.cholesterol.toFixed(1), unitOfMeasure: "mmol/L" }
+        { image: "/images/heart-rate.png", title: "Heart Rate", getValue: (data: HealthType) => data.heartRate.toString(), unitOfMeasure: "bpm" },
+        { image: "/images/blood-pressure.png", title: "Blood Pressure", getValue: (data: HealthType) => `${data.systolicBloodPressure}/${data.diastolicBloodPressure}`, unitOfMeasure: "mmHg" },
+        { image: "/images/blood-sugar.png", title: "Blood Sugar", getValue: (data: HealthType) => data.bloodSugar.toFixed(1), unitOfMeasure: "mmol/L" },
+        { image: "/images/cholesterol.png", title: "Cholesterol", getValue: (data: HealthType) => data.cholesterol.toFixed(1), unitOfMeasure: "mmol/L" }
     ];
 
     const periodChoices = [
@@ -79,7 +79,7 @@ const Health: React.FC = () => {
     const handleAdd = async () => {
         try {
             const values = await form.validateFields();
-            const newRecord: Omit<HealthData, 'id'> = {
+            const newRecord: Omit<HealthType, 'id'> = {
                 ...values,
                 date: values.date.format('YYYY-MM-DD'),
                 userId: userId,
@@ -94,7 +94,7 @@ const Health: React.FC = () => {
         }
     };
 
-    const handleUpdate = async (updatedRecord: HealthData) => {
+    const handleUpdate = async (updatedRecord: HealthType) => {
         try {
             await healthApi.updateHealth(updatedRecord);
             setHealthData(healthData.map(record =>
@@ -108,7 +108,7 @@ const Health: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await healthApi.deleteHealthd(id);
+            await healthApi.deleteHealth(id);
             setHealthData(healthData.filter(record => record.id !== id));
             message.success('Health record deleted successfully');
         } catch (error) {
