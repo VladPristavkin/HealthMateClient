@@ -1,0 +1,9 @@
+.right-sidebar {
+    background-color: #ffffff !important;
+    flex-direction: column;
+    display: flex;
+    box-shadow: 0.2em 0 1em rgba(0, 0, 0, 0.1);
+    border-radius: 3em;
+    overflow: hidden;
+    align-items: center;
+}

@@ -1,0 +1,53 @@
+.universal-chart {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border: none;
+    background-color: transparent;
+  }
+  
+  .chart-header {
+    margin-bottom: 20px;
+  }
+  
+  .period-select {
+    width: 150px;
+  }
+  
+  .chart-container {
+    position: relative;
+  }
+  
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .nav-button-left {
+    left: 10px;
+  }
+  
+  .nav-button-right {
+    right: 10px;
+  }
+  
