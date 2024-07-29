@@ -7,7 +7,7 @@ import HealthRecords from './components/HealthRecords/HealthRecords';
 import { Button, DatePicker, Form, InputNumber, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { healthApi } from '../../api/healthApi';
+import { del, get, post, put } from '../../api/genericApi';
 import { HealthType } from '../../shared/types/HealthType';
 
 const Health: React.FC = () => {
@@ -26,9 +26,18 @@ const Health: React.FC = () => {
         try {
             const today = moment().format('YYYY-MM-DD');
             const oneMonthAgo = moment().subtract(1, 'month').format('YYYY-MM-DD');
-            const records = await healthApi.getHealthBetweenDates(userId, oneMonthAgo, today);
-            setHealthData(records);
-            setChartData(convertToChartData(records));
+            const response = await get<HealthType[]>(`/Health/${userId}/by-date`, {
+                params: {
+                    date: today,
+                }
+            });
+            if (response.status === 'success') {
+                const records = response.data;
+                setHealthData(records);
+                setChartData(convertToChartData(records));
+            } else {
+                message.error('Failed to fetch health records');
+            }
         } catch (error) {
             message.error('Failed to fetch health records');
         }
@@ -60,11 +69,24 @@ const Health: React.FC = () => {
 
     const fetchData = async (period: string): Promise<DataPoint[]> => {
         const days = periodChoices.find(p => p.value === period)?.days || 7;
-        const endDate = moment().format('YYYY-MM-DD');
+        const finishDate = moment().format('YYYY-MM-DD');
         const startDate = moment().subtract(days, 'days').format('YYYY-MM-DD');
         try {
-            const records = await healthApi.getHealthBetweenDates(userId, startDate, endDate);
-            return convertToChartData(records);
+
+            const response = await get<HealthType[]>(`/Health/${userId}/between-dates`, {
+                params: {
+                    startDate,
+                    finishDate,
+                },
+            });
+
+            if (response.status === 'success') {
+                return convertToChartData(response.data);
+            } else {
+                message.error('Failed to fetch health data');
+                return [];
+            }
+
         } catch (error) {
             message.error('Failed to fetch health data');
             return [];
@@ -79,16 +101,24 @@ const Health: React.FC = () => {
     const handleAdd = async () => {
         try {
             const values = await form.validateFields();
-            const newRecord: Omit<HealthType, 'id'> = {
+            const health: Omit<HealthType, 'id'> = {
                 ...values,
                 date: values.date.format('YYYY-MM-DD'),
                 userId: userId,
                 notes: []
             };
-            const addedRecord = await healthApi.addHealth(newRecord);
-            setHealthData([...healthData, addedRecord]);
-            setIsModalVisible(false);
-            message.success('Health record added successfully');
+
+            const response = await post<Omit<HealthType, 'id'>, HealthType>('/Health', health);
+
+            if (response.status === 'success') {
+                const addedRecord = response.data;
+                setHealthData([...healthData, addedRecord]);
+                setIsModalVisible(false);
+                message.success('Health record added successfully');
+            } else {
+                message.error('Failed to add health record');
+            }
+
         } catch (error) {
             message.error('Failed to add health record');
         }
@@ -96,11 +126,17 @@ const Health: React.FC = () => {
 
     const handleUpdate = async (updatedRecord: HealthType) => {
         try {
-            await healthApi.updateHealth(updatedRecord);
-            setHealthData(healthData.map(record =>
-                record.id === updatedRecord.id ? updatedRecord : record
-            ));
-            message.success('Health record updated successfully');
+            updatedRecord.userId=userId;
+            const response = await put<HealthType, void>(`/Health/${updatedRecord.id}`, updatedRecord);
+
+            if (response.status === 'success') {
+                setHealthData(healthData.map(record =>
+                    record.id === updatedRecord.id ? updatedRecord : record
+                ));
+                message.success('Health record updated successfully');
+            } else {
+                message.error('Failed to update health record');
+            }
         } catch (error) {
             message.error('Failed to update health record');
         }
@@ -108,9 +144,14 @@ const Health: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await healthApi.deleteHealth(id);
-            setHealthData(healthData.filter(record => record.id !== id));
-            message.success('Health record deleted successfully');
+            const response = await del<void>(`/Health/${id}`);
+
+            if (response.status === 'success') {
+                setHealthData(healthData.filter(record => record.id !== id));
+                message.success('Health record deleted successfully');
+            } else {
+                message.error('Failed to delete health record');
+            }
         } catch (error) {
             message.error('Failed to delete health record');
         }
