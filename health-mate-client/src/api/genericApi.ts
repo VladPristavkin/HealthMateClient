@@ -16,25 +16,9 @@ interface RequestParams<T> {
 export async function apiRequest<RequestData, ResponseData>(
     params: RequestParams<RequestData>
 ): Promise<ApiResponse<ResponseData>> {
-
-    function restMethodToString(method: RestMethod): string {
-        switch (method) {
-            case RestMethod.Get:
-                return 'GET';
-            case RestMethod.Post:
-                return 'POST';
-            case RestMethod.Put:
-                return 'PUT';
-            case RestMethod.Delete:
-                return 'DELETE';
-            default:
-                throw new Error('Unknown REST method');
-        }
-    }
-
     try {
         const response: AxiosResponse<ResponseData> = await client.request({
-            method: typeof params.method === 'string' ? params.method : restMethodToString(params.method),
+            method: RestMethod[params.method],
             url: params.url,
             data: params.data,
             ...params.config,
