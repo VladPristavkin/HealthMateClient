@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { Card, Statistic, Row, Col, Button, Modal, Form, Input, InputNumber, DatePicker, Typography, Popconfirm, List } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
-import { NoteType } from "../../../../shared/types/NoteType";
-import { HealthType } from "../../../../shared/types/HealthType";
+import { NoteType } from "../../../../shared/types/Note";
+import { HealthType } from "../../../../shared/types/Health";
 
 interface HealthRecordsProps {
     onUpdate: (updatedRecord: HealthType) => void;
