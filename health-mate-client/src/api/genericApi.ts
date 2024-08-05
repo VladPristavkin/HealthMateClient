@@ -3,7 +3,7 @@ import { RestMethod } from "../shared/types/RestMethod";
 import { client } from "../shared/helpers/client";
 
 type SuccessResponse<T> = { status: 'success'; data: T };
-type ErrorResponse = { status: 'error'; error: string };
+type ErrorResponse = { status: 'error'; error: AxiosError };
 type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
 
 interface RequestParams<T> {
@@ -32,7 +32,7 @@ export async function apiRequest<RequestData, ResponseData>(
                 error: error.response?.data?.message || error.message,
             };
         }
-        return { status: 'error', error: 'An unexpected error occurred' };
+        return { status: 'error', error: error as AxiosError };
     }
 }
 

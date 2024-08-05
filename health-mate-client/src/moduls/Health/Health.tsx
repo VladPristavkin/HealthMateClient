@@ -8,10 +8,10 @@ import { Button, DatePicker, Form, InputNumber, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { del, get, post, put } from '../../api/genericApi';
-import { HealthType } from '../../shared/types/HealthType';
+import { HealthData } from '../../shared/types/Health';
 
 const Health: React.FC = () => {
-    const [healthData, setHealthData] = useState<HealthType[]>([]);
+    const [healthData, setHealthData] = useState<HealthData[]>([]);
     const [chartData, setChartData] = useState<DataPoint[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [form] = Form.useForm();
@@ -26,7 +26,7 @@ const Health: React.FC = () => {
         try {
             const today = moment().format('YYYY-MM-DD');
             const oneMonthAgo = moment().subtract(1, 'month').format('YYYY-MM-DD');
-            const response = await get<HealthType[]>(`/Health/${userId}/by-date`, {
+            const response = await get<HealthData[]>(`/Health/${userId}/by-date`, {
                 params: {
                     date: today,
                 }
@@ -43,7 +43,7 @@ const Health: React.FC = () => {
         }
     };
 
-    const convertToChartData = (data: HealthType[]): DataPoint[] => {
+    const convertToChartData = (data: HealthData[]): DataPoint[] => {
         return data.map(item => ({
             date: item.date,
             systolicBloodPressure: item.systolicBloodPressure,
@@ -55,10 +55,10 @@ const Health: React.FC = () => {
     };
 
     const healthCards = [
-        { image: "/images/heart-rate.png", title: "Heart Rate", getValue: (data: HealthType) => data.heartRate.toString(), unitOfMeasure: "bpm" },
-        { image: "/images/blood-pressure.png", title: "Blood Pressure", getValue: (data: HealthType) => `${data.systolicBloodPressure}/${data.diastolicBloodPressure}`, unitOfMeasure: "mmHg" },
-        { image: "/images/blood-sugar.png", title: "Blood Sugar", getValue: (data: HealthType) => data.bloodSugar.toFixed(1), unitOfMeasure: "mmol/L" },
-        { image: "/images/cholesterol.png", title: "Cholesterol", getValue: (data: HealthType) => data.cholesterol.toFixed(1), unitOfMeasure: "mmol/L" }
+        { image: "/images/heart-rate.png", title: "Heart Rate", getValue: (data: HealthData) => data.heartRate.toString(), unitOfMeasure: "bpm" },
+        { image: "/images/blood-pressure.png", title: "Blood Pressure", getValue: (data: HealthData) => `${data.systolicBloodPressure}/${data.diastolicBloodPressure}`, unitOfMeasure: "mmHg" },
+        { image: "/images/blood-sugar.png", title: "Blood Sugar", getValue: (data: HealthData) => data.bloodSugar.toFixed(1), unitOfMeasure: "mmol/L" },
+        { image: "/images/cholesterol.png", title: "Cholesterol", getValue: (data: HealthData) => data.cholesterol.toFixed(1), unitOfMeasure: "mmol/L" }
     ];
 
     const periodChoices = [
@@ -73,7 +73,7 @@ const Health: React.FC = () => {
         const startDate = moment().subtract(days, 'days').format('YYYY-MM-DD');
         try {
 
-            const response = await get<HealthType[]>(`/Health/${userId}/between-dates`, {
+            const response = await get<HealthData[]>(`/Health/${userId}/between-dates`, {
                 params: {
                     startDate,
                     finishDate,
@@ -101,14 +101,14 @@ const Health: React.FC = () => {
     const handleAdd = async () => {
         try {
             const values = await form.validateFields();
-            const health: Omit<HealthType, 'id'> = {
+            const health: Omit<HealthData, 'id'> = {
                 ...values,
                 date: values.date.format('YYYY-MM-DD'),
                 userId: userId,
                 notes: []
             };
 
-            const response = await post<Omit<HealthType, 'id'>, HealthType>('/Health', health);
+            const response = await post<Omit<HealthData, 'id'>, HealthData>('/Health', health);
 
             if (response.status === 'success') {
                 const addedRecord = response.data;
@@ -124,10 +124,10 @@ const Health: React.FC = () => {
         }
     };
 
-    const handleUpdate = async (updatedRecord: HealthType) => {
+    const handleUpdate = async (updatedRecord: HealthData) => {
         try {
             updatedRecord.userId=userId;
-            const response = await put<HealthType, void>(`/Health/${updatedRecord.id}`, updatedRecord);
+            const response = await put<HealthData, void>(`/Health/${updatedRecord.id}`, updatedRecord);
 
             if (response.status === 'success') {
                 setHealthData(healthData.map(record =>
